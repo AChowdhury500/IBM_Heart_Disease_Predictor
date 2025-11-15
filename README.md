@@ -32,6 +32,27 @@ Deployment
 
 - For Heroku-like platforms: ensure `requirements.txt` and `Procfile` exist. Use `gunicorn` as the WSGI server and push to your platform.
 
+Production (recommended)
+
+- On Windows, `gunicorn` is not supported. Use `waitress` as a production WSGI server instead.
+
+Run locally with Waitress (Windows):
+
+```powershell
+python -m pip install -r .\requirements.txt
+setx USE_WAITRESS 1
+setx FLASK_DEBUG 0
+# then open a new shell (or use $env:USE_WAITRESS=1 in current session) and run:
+python .\app.py
+```
+
+Or run without Waitress (development only):
+
+```powershell
+setx FLASK_DEBUG 1
+python .\app.py
+```
+
 Files added/important
 
 - `app.py` — Flask app and routes

@@ -118,4 +118,23 @@ def api_predict():
         return jsonify({'error': str(e)}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Use environment variables to control production vs development behavior.
+    # - Set FLASK_DEBUG=1 to enable the Flask debugger (only for development).
+    # - Set USE_WAITRESS=1 to run with the Waitress WSGI server (recommended on Windows).
+    debug = os.environ.get('FLASK_DEBUG', '0') == '1'
+    use_waitress = os.environ.get('USE_WAITRESS', '0') == '1'
+    host = os.environ.get('HOST', '0.0.0.0')
+    port = int(os.environ.get('PORT', '5000'))
+
+    if use_waitress:
+        # Waitress is a production-ready WSGI server that works well on Windows.
+        try:
+            from waitress import serve
+        except Exception:
+            raise RuntimeError('Waitress is not installed. Please install it with `pip install waitress`')
+
+        print('Starting with Waitress on %s:%s' % (host, port))
+        serve(app, host=host, port=port)
+    else:
+        # Default: run Flask development server. Make sure debug is False in production.
+        app.run(debug=debug, host=host, port=port)
