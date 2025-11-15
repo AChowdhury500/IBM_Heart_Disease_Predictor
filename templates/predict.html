@@ -8,6 +8,12 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
+    <style>
+      /* Allow dynamic width values from Jinja2 templates */
+      .probability-fill {
+        transition: width 0.3s ease;
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar">
