@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Predictor - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>❤️ HeartCare</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/" class="nav-link active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/predict" class="nav-link">Predict</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/about" class="nav-link">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Heart Disease Prediction System</h1>
+            <h2>With 90% of Accuracy</h2>
+            <p class="hero-subtitle">Using Advanced Machine Learning for Early Detection</p>
+            <p class="hero-description">
+                Our logistic regression model analyzes 11 critical health parameters to predict 
+                the likelihood of heart disease with high accuracy. Early detection saves lives.
+            </p>
+            <div class="hero-buttons">
+                <a href="/predict" class="btn btn-primary">Get Prediction</a>
+                <a href="/about" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2>Why Choose Our System?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔬</div>
+                    <h3>Scientific Accuracy</h3>
+                    <p>Built using logistic regression on comprehensive medical data</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Results</h3>
+                    <p>Get predictions in seconds with detailed risk analysis</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Privacy Focused</h3>
+                    <p>Your data remains confidential and secure</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="parameters">
+        <div class="container">
+            <h2>Parameters We Analyze</h2>
+            <div class="parameters-grid">
+                <div class="parameter-item">
+                    <span class="param-name">Age</span>
+                    <span class="param-desc">Patient's age in years</span>
+                </div>
+                <div class="parameter-item">
+                    <span class="param-name">Blood Pressure</span>
+                    <span class="param-desc">Resting blood pressure</span>
+                </div>
+                <div class="parameter-item">
+                    <span class="param-name">Cholesterol</span>
+                    <span class="param-desc">Serum cholesterol level</span>
+                </div>
+                <div class="parameter-item">
+                    <span class="param-name">Heart Rate</span>
+                    <span class="param-desc">Maximum heart rate achieved</span>
+                </div>
+                <div class="parameter-item">
+                    <span class="param-name">ECG Results</span>
+                    <span class="param-desc">Resting electrocardiographic results</span>
+                </div>
+                <div class="parameter-item">
+                    <span class="param-name">Chest Pain</span>
+                    <span class="param-desc">Type of chest pain experienced</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 HeartCare Predictor. IBM Internship Project. For educational purposes.</p>
+        </div>
+    </footer>
+</body>
+</html>

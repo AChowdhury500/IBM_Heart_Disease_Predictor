@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Heart Disease Prediction</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <h2>❤️ HeartCare</h2>
+        </div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="/" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="/predict" class="nav-link active">Predict</a>
+          </li>
+          <li class="nav-item">
+            <a href="/about" class="nav-link">About</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="predict-container">
+      <div class="container">
+        <h1>Heart Disease Prediction</h1>
+        <p class="subtitle">Enter the patient's health parameters below</p>
+
+        {% if model_accuracy is not none %}
+        <div class="model-accuracy">
+          <strong>Model accuracy:</strong> {{ model_accuracy }}%
+        </div>
+        {% endif %} {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" class="prediction-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="age">Age (years)</label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                min="20"
+                max="100"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="sex">Sex</label>
+              <select id="sex" name="sex" required>
+                <option value="">Select Gender</option>
+                <option value="1">Male</option>
+                <option value="0">Female</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="chest_pain_type">Chest Pain Type</label>
+              <select id="chest_pain_type" name="chest_pain_type" required>
+                <option value="">Select Type</option>
+                <option value="0">Typical Angina</option>
+                <option value="1">Atypical Angina</option>
+                <option value="2">Non-anginal Pain</option>
+                <option value="3">Asymptomatic</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="resting_bp">Resting BP (mmHg)</label>
+              <input
+                type="number"
+                id="resting_bp"
+                name="resting_bp"
+                min="90"
+                max="200"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="cholesterol">Cholesterol (mg/dl)</label>
+              <input
+                type="number"
+                id="cholesterol"
+                name="cholesterol"
+                min="100"
+                max="400"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="fasting_bs">Fasting Blood Sugar</label>
+              <select id="fasting_bs" name="fasting_bs" required>
+                <option value="">Select</option>
+                <option value="0">≤ 120 mg/dl</option>
+                <option value="1">> 120 mg/dl</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="resting_ecg">Resting ECG</label>
+              <select id="resting_ecg" name="resting_ecg" required>
+                <option value="">Select Result</option>
+                <option value="0">Normal</option>
+                <option value="1">ST-T Abnormality</option>
+                <option value="2">Left Ventricular Hypertrophy</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="max_hr">Max Heart Rate</label>
+              <input
+                type="number"
+                id="max_hr"
+                name="max_hr"
+                min="60"
+                max="210"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="exercise_angina">Exercise Angina</label>
+              <select id="exercise_angina" name="exercise_angina" required>
+                <option value="">Select</option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="oldpeak">ST Depression (oldpeak)</label>
+              <input
+                type="number"
+                step="0.1"
+                id="oldpeak"
+                name="oldpeak"
+                min="0"
+                max="6"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="slope">Slope</label>
+              <select id="slope" name="slope" required>
+                <option value="">Select Slope</option>
+                <option value="0">Upsloping</option>
+                <option value="1">Flat</option>
+                <option value="2">Downsloping</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-predict">
+            Predict Heart Disease
+          </button>
+        </form>
+
+        {% if show_result and result %}
+        <div class="result-container">
+          <h2>Prediction Result</h2>
+          <div
+            class="result-card {% if result.risk_level == 'High' %}high-risk {% elif result.risk_level == 'Medium' %}medium-risk {% else %}low-risk {% endif %}"
+          >
+            <div class="result-header">
+              <h3>{{ result.prediction }}</h3>
+              <span
+                class="risk-badge {% if result.risk_level == 'High' %}high-risk-badge {% elif result.risk_level == 'Medium' %}medium-risk-badge {% else %}low-risk-badge {% endif %}"
+              >
+                {{ result.risk_level }} Risk
+              </span>
+            </div>
+
+            <div class="probability-bar">
+              <div class="probability-label">
+                Probability: {{ result.probability }}%
+              </div>
+              <div class="probability-track">
+                <div
+                  class="probability-fill"
+                  style="width: {{ result.probability }}%;"
+                ></div>
+              </div>
+            </div>
+
+            <div class="input-summary">
+              <h4>Input Summary</h4>
+              <div class="summary-grid">
+                {% for key, value in result.input_data.items() %}
+                <div class="summary-item">
+                  <strong>{{ key }}:</strong> {{ value }}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="medical-disclaimer">
+              <p>
+                <strong>Disclaimer:</strong> This prediction is for educational
+                purposes only. Please consult with healthcare professionals for
+                medical diagnosis.
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>
+          &copy; 2024 HeartCare Predictor. IBM Internship Project. For
+          educational purposes.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
