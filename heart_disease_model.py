@@ -147,8 +147,15 @@ class HeartDiseasePredictor:
                 raise RuntimeError("Model is not loaded. Train or provide model files before prediction.")
         
         # Convert input to numpy array and scale
-        input_array = np.array(input_data).reshape(1, -1)
-        input_scaled = self.scaler.transform(input_array)
+        # Build a DataFrame with feature names so transformers that expect
+        # feature names (fitted from DataFrame) will accept the input without warnings.
+        try:
+            df_input = pd.DataFrame([input_data], columns=self.feature_names)
+        except Exception:
+            # Fallback: convert to numpy array if column names don't match
+            df_input = pd.DataFrame(np.array(input_data).reshape(1, -1))
+
+        input_scaled = self.scaler.transform(df_input)
         
         # Make prediction
         prediction = self.model.predict(input_scaled)[0]
